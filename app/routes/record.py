@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
-from app.depends.customer_id import getCustomerId
+from app.utils.customer_id import getCustomerId
 
 class By(BaseModel):
   by: str

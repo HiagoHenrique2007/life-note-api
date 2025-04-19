@@ -1,0 +1,2 @@
+SECRET_KEY = b'fIsH-_-BaLLCAT20comer70correr'
+ALGORITHM = 'HS256'

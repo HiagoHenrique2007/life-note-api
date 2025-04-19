@@ -6,5 +6,3 @@ app.include_router(customer)
 app.include_router(record.record_router)
 app.include_router(text.text_router)
 
-
-

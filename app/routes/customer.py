@@ -12,10 +12,12 @@ class SignupData(BaseModel):
 
 customer_router = APIRouter(prefix='/customer')
 
+# obter as informações basicas do customer
 @customer_router.get('/info')
 async def customerInfo(id: int = Depends(getCustomerId)):
-  ''' buscar os dados do usuario como email e nome e enviar para o front ''' 
+  ''' buscar os dados do usuario como email e nome e enviar para o front e salvar no localStorage ''' 
 
+# login
 @customer_router.post('login')
 async def login(login_data: OAuth2PasswordRequestForm = Depends()):
   username = login_data.username
@@ -25,10 +27,12 @@ async def login(login_data: OAuth2PasswordRequestForm = Depends()):
     raise HTTPException(401, detail='Username ou password ausentes!')
   if not await checkPwd(id, password):
     raise HTTPException(401, 'Senha invalida!')
-  token = await generateJwt(id)
+  token = generateJwt(id)
 
+# criar conta se nao tiver
 @customer_router.post('/signup')
 async def createAccount(signup_data: SignupData):
+  # pendencia: verificar se o email ja esta cadastrado
   name = signup_data.name
   email = signup_data.email
   password = signup_data.password

@@ -6,11 +6,12 @@ from app.config import ALGORITHM, SECRET_KEY
 ''' o OAuthPasswordBearer é uma dependencia pronta que me retorna o token ja separado do header
   o primeiro parametro diz para o fastapi onde o usuario pode obter o token JWT
  '''
-oauth2_schema = OAuth2PasswordBearer('login')
+oauth2_schema = OAuth2PasswordBearer(tokenUrl='/customer/login', description='Fazer login!')
 
 async def getCustomerId(token: str = Depends(oauth2_schema)):
   try:
     payload = jwt.decode(token, SECRET_KEY, algorithms=ALGORITHM)
+    print(payload)
     customer_id =  payload.get('sub', None)
     if customer_id is None:
       raise HTTPException(401, 'Token Invalido: claim sub ausente!')
@@ -19,4 +20,4 @@ async def getCustomerId(token: str = Depends(oauth2_schema)):
   except ExpiredSignatureError: # exceção se o token estiver expirado
     raise HTTPException(401, detail='Token Expirado!')
   except JWTError: # exceção se o token foi auterado e quebrou a signature
-    print('Token Adulterado!\tDanger!!!')
+    raise HTTPException(status_code=401, detail='Token Adulterado! Danger!!!')

@@ -2,12 +2,12 @@ from datetime import datetime, timedelta, timezone
 from jose import jwt
 from app.config import ALGORITHM, SECRET_KEY
 
-def generateJwt(id: int) -> str:
+def generateJwt(id: str) -> str:
   ''' função para gerar e retornar o token JWT '''
   exp = datetime.now(timezone.utc) + timedelta(weeks=2)
   payload = {
     'sub': id,
     'exp': exp
   }
-  token: str = jwt.encode(payload, SECRET_KEY, ALGORITHM)
+  token: str = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
   return token

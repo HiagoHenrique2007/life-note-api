@@ -16,6 +16,10 @@ class RecordUpdate(BaseModel):
 
 record_router = APIRouter(prefix='/record')
 
+@record_router.get('/jwt/verify')
+async def verifyJwt(customer_id: int = Depends(getCustomerId)):
+  return { 'id': customer_id }
+
 @record_router.get('/')
 async def getAllRecords(customer_id: int = Depends(getCustomerId)):
   ''' obter os registro do usuario

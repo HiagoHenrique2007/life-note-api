@@ -1,7 +1,7 @@
 import bcrypt
 
-def checkPwd(username: str, password: str) -> bool:
-  pass
+def checkPwd(password: str, hashed_pwd: str) -> bool:
+  return bcrypt.checkpw(password.encode(), hashed_pwd.encode())
 
 def generatePwdHash(password: str | bytes):
   if isinstance(password, str): password = password.encode()

@@ -7,13 +7,12 @@ from app.services.auth.create_jwt import createJwt
 from app.services.password import createPwdHash, checkPwdHash
 from app.services.model.db_model import db_model
 
-
 router = APIRouter(prefix='/customer')
 
 # obter as informações basicas do customer
-@router.get('/info')
-async def customerInfo(id: int = Depends(getUserId)):
-  ''' buscar os dados do usuario como email e nome e enviar para o front e salvar no localStorage ''' 
+# @router.get('/info')
+# async def customerInfo(id: int = Depends(getUserId)):
+#   ''' buscar os dados do usuario como email e nome e enviar para o front e salvar no localStorage ''' 
 
 # login
 '''OAuthPasswordRequestForm é o password flow do OAuth 2.0
@@ -27,8 +26,10 @@ async def login(login_data: OAuth2PasswordRequestForm = Depends()):
   if email is None or password is None:
     raise HTTPException(401, detail='Username ou password ausentes!')
   # ver se a porra do cara ta no banco
-  if not db_model.dontHasEmailOnDb(email=email):
-    user = db_model.getCustomerInfo(email=email)
+  if not db_model.dontHasUser(email=email):
+    user = db_model.userInfo(email=email)
+  else:
+    raise HTTPException(401, 'Email invalido!')
   if not checkPwdHash(password, user.password):
     raise HTTPException(401, 'Senha invalida!')
   token = createJwt(user.id)
@@ -37,8 +38,11 @@ async def login(login_data: OAuth2PasswordRequestForm = Depends()):
 # criar conta se nao tiver
 @router.post('/signup', status_code=201)
 async def createAccount(signup_data: SignupData):
-  # pendencia: verificar se o email ja esta cadastrado
   email = signup_data.email
-  name = signup_data.name
-  password = signup_data.password
-  pwd_hash = createPwdHash(password)
+  if  db_model.dontHasUser(email=email):
+    name = signup_data.name
+    password = signup_data.password
+    pwd_hash = createPwdHash(password)
+    db_model.createUser(name=name, email=email, password=pwd_hash)
+  else:
+    raise HTTPException(409, 'Usuario ja cadastrado!')

@@ -100,3 +100,6 @@ life-note-api/
 ``
 
 Essa estrutura promove uma separação clara de responsabilidades e facilita a escalabilidade do projeto.
+
+
+

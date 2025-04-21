@@ -4,16 +4,7 @@ from pydantic import BaseModel
 from app.utils.customer_id import getCustomerId
 from app.utils.pwd import checkPwd, generatePwdHash
 from app.utils.jwtencode import generateJwt
-
-global users
-users = [
-  {
-    'id': '1',
-    'name': 'bebeto',
-    'email': 'bebete@bebeto.beto',
-    'hash': generatePwdHash('lam007')
-  }
-]
+from app.database.model import model
 
 class SignupData(BaseModel):
   name: str
@@ -24,7 +15,7 @@ customer_router = APIRouter(prefix='/customer')
 
 @customer_router.get('/')
 async def getUsers():
-  return users
+  return 1
 
 # obter as informações basicas do customer
 @customer_router.get('/info')
@@ -38,20 +29,12 @@ async def login(login_data: OAuth2PasswordRequestForm = Depends()):
   password = login_data.password
   if email is None or password is None:
     raise HTTPException(401, detail='Username ou password ausentes!')
-  
-  # tenho que implementar a parte do banco, nao ta pronta ainda
-  hashed_pwd = None
-  id = None
-  for user in users:
-    if user.get('email') == email:
-      id = user.get('id')
-      hashed_pwd = user.get('hash')
-      print(id, user.get('email'), email, hashed_pwd)
-  if hashed_pwd is None: raise HTTPException(400, detail='Email nao cadastrado!')
-    
-  if not checkPwd(password, hashed_pwd):
+  # ver se a porra do cara ta no banco
+  if not model.dontHasEmailOnDb(email=email):
+    customer = model.getCustomerInfo(email=email)
+  if not checkPwd(password, customer.password):
     raise HTTPException(401, 'Senha invalida!')
-  token = generateJwt(id)
+  token = generateJwt(customer.id)
   return  {"access_token": token, "token_type": "bearer"}
 
 # criar conta se nao tiver
@@ -59,17 +42,13 @@ async def login(login_data: OAuth2PasswordRequestForm = Depends()):
 async def createAccount(signup_data: SignupData):
   # pendencia: verificar se o email ja esta cadastrado
   email = signup_data.email
-  for user in users:
-    if email == user.get('email'):
-      raise HTTPException(409, detail='Email ja cadastrado!')
+
   name = signup_data.name
   password = signup_data.password
   pwd_hash = generatePwdHash(password)
   user = {
-    'id': str(int(users[-1].get('id')) + 1),
+    'id': 1,
     'name': name,
     'email': email,
     'hash': pwd_hash
   }
-  users.append(user)
-  return user

@@ -1,5 +1,5 @@
 [project]
-name = "users-api-crud"
+name = "Life Note API"
 version = "0.2.0"
 description = ""
 authors = [

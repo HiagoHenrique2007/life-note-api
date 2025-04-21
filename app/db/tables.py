@@ -8,7 +8,7 @@ from sqlalchemy.orm import (
   DeclarativeBase, # classe para criar uma tabela
   Mapped, # define os type hints
   mapped_column, # cria a coluna
-  relationship,# define as relações entre os campos das tabelas
+  relationship, # define as relações entre os campos das tabelas
 )
 
 ''' isso é necessario para que todas as tabelas sejam centralizadas em uma Base
@@ -26,8 +26,8 @@ class CreatedUpdatedAt:
   )
 
 # tabelas
-class Customer(Base):
-  __tablename__ = 'customer'
+class User(Base):
+  __tablename__ = 'user'
 
   id: Mapped[int] = mapped_column(Integer, primary_key=True)
   name: Mapped[str] = mapped_column(String(50), nullable=False)
@@ -35,7 +35,7 @@ class Customer(Base):
   password: Mapped[str] = mapped_column(String, nullable=False)
 
   def __repr__(self):
-    return f'Customer:  id: {self.id}  -  name: {self.name}  -  email: {self.email}'
+    return f'User: ID: {self.id}, NAME: {self.name}, EMAIL: {self.email}'
   
 class Record(Base, CreatedUpdatedAt):
   __tablename__ = 'record'

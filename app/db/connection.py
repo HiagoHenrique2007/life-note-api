@@ -10,6 +10,6 @@ def connect(func):
   @wraps(func)
   def wrapper(self, *args, **kwargs):
     with Session(bind=engine) as session:
-      result = func(self, *args, session=session, **kwargs)
+      result = func(self, *args, **kwargs, session=session)
     return result
   return wrapper

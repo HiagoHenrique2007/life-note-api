@@ -20,10 +20,12 @@ class DbModel:
     return result is None
 
   @connect
-  def userInfo(self, *, email: str, session: Session) -> User:
-    stmt = select(User).where(User.email == email)
+  def userInfo(self, id: int = None, email: str = None,  session: Session = None) -> User:
+    if id is not None:
+      stmt = select(User).where(User.id == id)
+    else:
+      stmt = select(User).where(User.email == email)
     user = session.scalars(stmt).all()
     return user[0]
-
 
 db_model = DbModel()

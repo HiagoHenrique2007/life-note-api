@@ -1,6 +1,6 @@
 [project]
-name = "Life Note API"
-version = "0.2.0"
+name = "life-note-api"
+version = "0.1.0"
 description = ""
 authors = [
     {name = "hiago",email = "imhiagohenrique@gmail.com"}

@@ -13,7 +13,6 @@ def getUserId(token: str = Cookie(default=None, alias='access-token')):
     raise HTTPException(401, detail='Token ausente, faça login para obte-lo.')
   try:
     payload = jwt.decode(token, SECRET_KEY, algorithms=ALGORITHM)
-    print(payload)
     user_id =  payload.get('sub', None)
     if user_id is None:
       raise HTTPException(401, detail='Token Invalido: claim sub ausente!')
@@ -23,4 +22,4 @@ def getUserId(token: str = Cookie(default=None, alias='access-token')):
     raise HTTPException(401, detail='Token Expirado!')
   except JWTError: # exceção se o token foi auterado e quebrou a signature
     print(f'Erro ao verificar o jwt: {JWTError}')
-    raise HTTPException(status_code=401, detail='Token Adulterado! Danger!!!')
+    raise HTTPException(status_code=401, detail='Token Invalido!')

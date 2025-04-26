@@ -1,9 +1,10 @@
 from pydantic import BaseModel
 
 class Record(BaseModel):
-  feeling: str
-  emotion: str
+  emotion_id: int
+  title: str | None = None
   text: str
+  
 
 class RecordUpdate(BaseModel):
   feeling: str | None = None

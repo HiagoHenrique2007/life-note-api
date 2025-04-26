@@ -24,8 +24,8 @@ Tipo uma versão minimalista do Daylio, voltado pra registro emocional.
 
 - [ x ] gerar e verificar o jwt
 - [ x ] gerar hash da senha e verificar
-- [  ] endpoint de login
-- [  ] endpoint de signup
+- [ x ] endpoint de login
+- [ x ] endpoint de signup
 - [  ] endpoints de read GET
 - [  ] endpoints de create POST
 - [  ] endpoints de update PUT/PATCH
